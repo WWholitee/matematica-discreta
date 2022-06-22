@@ -26,8 +26,8 @@ import java.util.Set;
  *
  * Podeu fer aquesta entrega en grups de com a màxim 3 persones, i necessitareu com a minim Java 8.
  * Per entregar, posau a continuació els vostres noms i entregau únicament aquest fitxer.
- * - Nom 1:
- * - Nom 2:
+ * - Nom 1:Elena Fernández Wyzynska
+ * - Nom 2: Marc Gómez Barceló
  * - Nom 3:
  *
  * L'entrega es farà a través d'una tasca a l'Aula Digital abans de la data que se us hagui
@@ -53,21 +53,50 @@ class Entrega {
     /*
      * És cert que ∀x,y. P(x,y) -> Q(x) ^ R(y) ?
      */
-    static boolean exercici1(
-        int[] universe,
-        BiPredicate<Integer, Integer> p,
-        Predicate<Integer> q,
-        Predicate<Integer> r) {
+   static boolean exercici1(int[] universe,BiPredicate<Integer, Integer> p,Predicate<Integer> q,Predicate<Integer> r) {
+             int h = 0;
+             for (int i = 0; i <universe.length; i ++) {
+                  int x = universe[i];
+                 for (int j = 0; j <universe.length; j ++) {
+                     int y = universe[j];
+                     if (x!=y && ((p.test(x,y) == false) || (p.test(x,y) == true && q.test(x) == true && r.test(y) == true))) {
+                         h++;
+                     }
+                 }
 
-      return false; // TO DO
-    }
+             }
+             if (h == (universe.length*(universe.length-1))) {
+                 return true;
+             } else
+                 return false;
+}
 
     /*
      * És cert que ∃!x. ∀y. Q(y) -> P(x) ?
      */
     static boolean exercici2(int[] universe, Predicate<Integer> p, Predicate<Integer> q) {
-      return false; // TO DO
-    }
+            int h;
+            int k=0;
+            for (int i = 0; i <universe.length; i ++) {
+                h=0;
+                int x = universe[i];
+                for (int j = 0; j <universe.length; j ++) {
+                    int y = universe[j];
+                    if (x!=y && !((p.test(x) == false && q.test(y) == true))) {
+                        h++;
+                    }
+                }
+                if (h == (universe.length-1)) {
+                    k++;
+                }
+            }
+            if (k == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
 
     /*
      * És cert que ¬(∃x. ∀y. y ⊆ x) ?
@@ -76,6 +105,7 @@ class Entrega {
      * que cada un d'ells està ordenat de menor a major.
      */
     static boolean exercici3(int[][] universe) {
+     
       return false; // TO DO
     }
 
@@ -83,7 +113,27 @@ class Entrega {
      * És cert que ∀x. ∃!y. x·y ≡ 1 (mod n) ?
      */
     static boolean exercici4(int[] universe, int n) {
-      return false; // TO DO
+       int x;
+      int y;
+      int cont = 0;
+      int contaux;
+      for (int i = 0; i<universe.length; i++){
+      contaux = 0;
+      x = universe [i];
+      for (int j = 0; j<universe.length; j++){
+      y = universe[j];
+      if (x!=y && ((x*y)%n==1)){
+      contaux++;
+      }
+      }
+      if (contaux == (universe.lenght-1)){
+      cont++;
+      }
+      }
+      if (cont ==universe.length){
+      return true;
+      }else return false;
+       // TO DO
     }
 
     /*
@@ -184,7 +234,31 @@ class Entrega {
      * tant `a` com cada un dels elements de `p` està ordenat de menor a major.
      */
     static boolean exercici1(int[] a, int[][] p) {
-      return false; // TO DO
+        int campos = 0; // numero de campos grandes
+        int espacio=0; // guardará el numero de caracteres que hay en a
+        int numiguales=0;
+        espacio= a.length;
+        campos=p.length;
+        int subespacios =0;// numero de espacio en un campo
+        for(int i = 0; i<campos;i++){
+            for(int j=0;j<p.length;j++){
+                for(int k=0;k<p[j].length;k++){
+                    if(a[k]==p[i][j]){
+                        numiguales++;
+                    }
+                }
+            }
+
+        }
+        if(numiguales== espacio){
+
+            return true;
+
+        }
+       // TO DO
+        return false;
+
+
     }
 
     /*
@@ -193,7 +267,70 @@ class Entrega {
      * Podeu soposar que `x` pertany a `a` i que `a` està ordenat de menor a major.
      */
     static boolean exercici2(int[] a, int[][] rel, int x) {
-      return false; // TO DO
+        // TO DO
+        //////////////////comprobamos que sea reflexiva
+        int numreflexivo = 0;
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < rel.length; j++) {
+                for (int z = 0; z < rel[j].length; z++) {
+                    if (rel[j][z] == a[i]) {
+
+                        if (rel[j][1] == a[i]) {
+                            numreflexivo++;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+        if (numreflexivo != a.length) {
+            return false;
+        }
+        //////////////// comprobamos que es antisimetrica 
+        int posc1=0;
+        int posc2=0;
+        int numbuscando=0;
+        for (int j = 0; j < rel.length; j++) {
+            for (int z = 0; z < rel[j].length; z++) {
+                    if(numbuscando==0){
+                        posc1=rel[j][z];
+                        z++;
+                        posc2=rel[j][z];
+                        numbuscando++;
+                    }else if(posc2==rel[j][z]){
+                        z++;
+                        if(posc1==rel[j][z]){
+                            return false;
+
+                        }
+
+                    }
+            }
+        }
+        //////////comprobamos transitividad
+        int tran=0;
+        for(int h=0;h<rel.length;h++){
+            int val_1=rel[h][0];
+            int val_2=rel[h][1];
+            for(int i=0;i<rel.length;i++){
+                if(val_1==rel[i][1]){
+                    if(val_2==rel[i][0]){
+                    tran++;
+                    }
+                }else if(val_2==rel[i][0]){
+                    val_2=rel[i][1];
+                }
+            }
+
+        }
+
+        if(tran>=1){
+            return true;
+        }
+      return false; 
+
     }
 
     /*
@@ -201,8 +338,29 @@ class Entrega {
      * `y` (ordenau el resultat de menor a major, podeu utilitzar `Arrays.sort()`). Podeu suposar
      * que `y` pertany a `codom` i que tant `dom` com `codom` també estàn ordenats de menor a major.
      */
-    static int[] exercici3(int[] dom, int[] codom, Function<Integer, Integer> f, int y) {
-      return new int[]{}; // TO DO
+   static int[] exercici3(int[] dom, int[] codom, Function<Integer, Integer> f, int y) {
+
+        int a =0;
+        int cnum= dom.length;
+        int[] antiimagen;
+        ArrayList<Integer> guard = new ArrayList<Integer>();
+
+        for(int i=0; i<cnum;i++){
+            a=f.apply(dom[i]);
+            if(a==y){
+                guard.add(dom[i]);
+
+            }
+
+        }
+        int p= guard.size();
+        antiimagen =new int[p];
+        for(int i=0;i<p;i++){
+            antiimagen[i]=guard.get(i);
+
+        }
+        System.out.println(antiimagen[1]);
+        return antiimagen;
     }
 
     /*
@@ -220,8 +378,52 @@ class Entrega {
     static final int SURJECTIVE = 2;
     static final int BIJECTIVE = INJECTIVE + SURJECTIVE;
 
-    static int exercici4(int[] dom, int[] codom, Function<Integer, Integer> f) {
-      return -1; // TO DO
+   static int exercici4(int[] dom, int[] codom, Function<Integer, Integer> f) {
+        int p =dom.length;
+        int o=codom.length;
+        int inj=0;
+        int isinj=0;
+        int sobr=0;
+        int issobr=0;
+        int isbiy=0;
+        int isnoth=0;
+        //////////////////////comprobamos inejectiva
+         if(o>=p){
+             for(int i=0;i<p;i++){
+                 if(codom[i]==dom[i]){
+                     inj++;
+                 }
+             }
+         }
+         if(inj==p){
+             isinj=1;
+         }
+         ///////////////////comprobamos sobreyectiva 
+         for (int i=0;i<o;i++){
+             if(dom[i]==codom[i]){
+                 sobr++;
+             }
+         }
+         if(sobr==o){
+             issobr=1;
+         }
+         if(issobr==1){
+             if(isinj==1){
+                 isbiy=1;
+                 issobr=0;
+                 isinj=0;
+             }
+         }
+
+         if(isinj==1){
+             return 1;
+
+         }else if(issobr==1){
+             return 2;
+         }else if(isbiy==1){
+             return 3;
+         }else
+      return  0;
     }
 
     /*
@@ -362,7 +564,25 @@ class Entrega {
      * Podeu suposar que `a` i `b` són positius.
      */
     static int exercici1(int a, int b) {
-      return -1; // TO DO
+     while (b!=0){
+      x=b;
+      b=a%b;
+      a=x;
+      }
+      return a;
+      while (b!=0){
+      x=b;
+      b=a%b;
+      a=x;
+      }
+      return a;
+      int x;
+      while (b!=0){
+      x=b;
+      b=a%b;
+      a=x;
+      }
+      return a;
     }
 
     /*
@@ -371,7 +591,15 @@ class Entrega {
      * Podeu suposar que `a`, `b` i `c` són positius.
      */
     static boolean exercici2(int a, int b, int c) {
-      return false; // TO DO
+      int x;
+      while(b!=0) {
+      x=b;
+      b=a%b;
+      a=x;
+      }
+      if (c%a==0){
+      return true;
+      } else return false;
     }
 
     /*
@@ -380,7 +608,16 @@ class Entrega {
      * Retornau l'invers sempre entre 1 i `n-1`, en cas que no existeixi retornau -1
      */
     static int exercici3(int a, int n) {
-      return -1; // TO DO
+      int noexiste = -1;
+      int cont = 0;
+      for (int x=1; x<n; x++){
+      if (((a%n)*(x%n))%n==1){
+      return x;
+      } else cont++;
+      }
+      if (cont==(n-1)){
+      return noexiste;
+      }
     }
 
     /*
@@ -419,14 +656,38 @@ class Entrega {
      * Donada una matriu d'adjacencia `A` d'un graf no dirigit, retornau l'ordre i la mida del graf.
      */
     static int[] exercici1(int[][] A) {
-      return new int[]{}; // TO DO
+     int mida = 0;
+    Int cont = 0;
+    for (int x = 0,  x < A.length,  x++){
+    for (y = cont, y<Alength, y++){
+    mida = mida + A[x][y];
+    }
+    cont++;
+    }
+    int resultat[] = new int[2];
+    resultat[0] = cont + 1;
+    resultat[1] = mida;
+    return resultat;
     }
 
     /*
      * Donada una matriu d'adjacencia `A` d'un graf no dirigit, digau si el graf es eulerià.
      */
     static boolean exercici2(int[][] A) {
-      return false; // TO DO
+      int total;
+      int cont=0;
+      for (int x=o, x<A.length, x++){
+      total = 0;
+      for (int y=0, y<A.length, y++){
+      total = total + A[x][y];
+      }
+      if (total%2 == 0){
+      cont++;
+      }
+      }
+      if (cont == A.length){
+      return true;
+      }else return false;
     }
 
     /*
@@ -435,14 +696,34 @@ class Entrega {
      *
      */
     static int exercici3(int n, int d) {
-      return -1; // TO DO
+      int aux = n;
+      int total = n;
+      for (aux=!0){
+      aux= aux - d;
+      aux++;
+      total++;
+      }
+      return total;
     }
 
     /*
      * Donada una matriu d'adjacencia `A` d'un graf connex no dirigit, digau si el graf conté algún cicle.
      */
     static boolean exercici4(int[][] A) {
-      return false; // TO DO
+      int contaux;
+      int cont = 0;
+      for (int x=0,;x<A.length; x++){
+      contaux = 0;
+      for (int y=0; y<A.length; y++){
+      contaux = contaux+ A[x][y];
+      }
+      if (contaux ==  A.length){
+      cont++;
+      }
+      }
+      if (cont == A.length){
+      return true;
+      }else return false; 
     }
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
